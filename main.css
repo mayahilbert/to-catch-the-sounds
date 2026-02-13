@@ -169,15 +169,18 @@ nav {
     top: 0;
 }
 
-nav *, .back-to-top {
+nav *,
+.back-to-top {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     text-decoration: none;
     color: var(--main-text-color);
 }
+
 a {
     color: var(--highlight-text-color)
 }
+
 hr {
     margin: 2em 0;
     color: #887f60
@@ -517,93 +520,95 @@ dialog:not([open]) {
 }
 
 /* Performance Stills */
-        :root {
-            --stripe-thickness: 1vw;
-        }
+:root {
+    --stripe-thickness: 1vw;
+}
 
-        body.stills-body {
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-            margin: 0;
-            background: url("images/stripes/pink and green two.jpg") 0 0/contain no-repeat, url("images/stripes/gray\ six.jpg") center 100%/contain repeat;
-        }
+body.stills-body {
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    background: url("images/stripes/pink and green two.jpg") 0 0/contain no-repeat, url("images/stripes/gray\ six.jpg") center 100%/contain repeat;
+}
+
 .stills-body nav a {
     background-color: #453F45;
     padding: 0 0.5em;
     font-weight: 600;
 }
-        /* Fixed diagonal stripes overlay */
-        .stripe-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100%;
-            background: repeating-linear-gradient(50deg,
-                    #453F45 0,
-                    #453F45 var(--stripe-thickness),
-                    transparent var(--stripe-thickness),
-                    transparent calc(var(--stripe-thickness) * 2));
-            pointer-events: none;
-            z-index: 5;
-        }
 
-        /* Background image container */
-        .background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: 1;
-            overflow: hidden;
-        }
+/* Fixed diagonal stripes overlay */
+.stripe-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    background: repeating-linear-gradient(50deg,
+            #453F45 0,
+            #453F45 var(--stripe-thickness),
+            transparent var(--stripe-thickness),
+            transparent calc(var(--stripe-thickness) * 2));
+    pointer-events: none;
+    z-index: 5;
+}
 
-        .background-image {
-            width: 100%;
-            height: auto;
-            min-height: 100vh;
-            object-fit: cover;
-            will-change: transform;
-        }
+/* Background image container */
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+}
 
-        /* Main content container */
-        .content {
-            position: relative;
-            z-index: 10;
-        }
+.background-image {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    object-fit: cover;
+    will-change: transform;
+}
 
-        /* Gallery container */
-        .gallery {
-            display: flex;
-            justify-content: center;
-            gap: 10vw;
-            max-width: 100%;
-        }
+/* Main content container */
+.content {
+    position: relative;
+    z-index: 10;
+}
 
-        /* Individual columns */
-        .column {
-            flex: 0 0 35vw;
-            margin-top: 7vw;
-            display: flex;
-            flex-direction: column;
-            gap: 12vw;
-            will-change: transform;
-        }
+/* Gallery container */
+.gallery {
+    display: flex;
+    justify-content: center;
+    gap: 10vw;
+    max-width: 100%;
+}
 
-        .column-1 {
-            /* This column will scroll at 0.8x speed */
-        }
+/* Individual columns */
+.column {
+    flex: 0 0 35vw;
+    margin-top: 7vw;
+    display: flex;
+    flex-direction: column;
+    gap: 12vw;
+    will-change: transform;
+}
 
-        .column-2 {
-            /* This column will scroll at 0.6x speed */
-            margin-top: 40vh;
-            /* Offset start position */
-        }
+.column-1 {
+    /* This column will scroll at 0.8x speed */
+}
 
-        /* Image items */
+.column-2 {
+    /* This column will scroll at 0.6x speed */
+    margin-top: 40vh;
+    /* Offset start position */
+}
 
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-        }
+/* Image items */
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+}
