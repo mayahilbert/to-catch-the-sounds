@@ -213,7 +213,7 @@ body {
 }
 
 /* Video sections container */
-main {
+main.home-main {
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
     width: 100%;
