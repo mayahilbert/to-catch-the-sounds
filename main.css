@@ -1,0 +1,609 @@
+.gray-panel {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 50%;
+    /* default: panels cover the viewport when closed */
+    background-color: var(--main-bg-color);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.2s;
+}
+
+/* Panels are positioned at their sides by default */
+.gray-panel.left-panel {
+    left: 0;
+    transform: translateX(0);
+}
+
+.gray-panel.right-panel {
+    right: 0;
+    transform: translateX(0);
+}
+
+/* Prevent font size inflation */
+html {
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    overflow-x: hidden;
+}
+
+/* Remove default margin in favour of better control in authored CSS */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin-block-end: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Set shorter line heights on headings and interactive elements */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+    line-height: 1.1;
+}
+
+/* Balance text wrapping on headings */
+h1,
+h2,
+h3,
+h4 {
+    text-wrap: balance;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+    color: currentColor;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button {
+    -webkit-appearance: none;
+    border-radius: 0;
+    text-align: inherit;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    color: inherit;
+    font: inherit;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+    min-height: 10em;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+    scroll-margin-block: 5ex;
+}
+
+/* CSS reset end */
+
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    --main-bg-color: #453F45;
+    --main-text-color: #dadbf1;
+    --highlight-text-color: #f5f8ff;
+}
+
+html {
+    transition: 0.8s;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+}
+
+#homepage.overlay-open {
+    background: black;
+    overflow: hidden;
+}
+
+#homepage.overlay-open-light {
+    overflow: hidden;
+}
+
+header {
+    z-index: 101;
+    padding: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    width: 100%;
+    z-index: 100;
+    top: 0;
+}
+
+nav *, .back-to-top {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: var(--main-text-color);
+}
+a {
+    color: var(--highlight-text-color)
+}
+hr {
+    margin: 2em 0;
+    color: #887f60
+}
+
+img {
+    max-width: 100vw;
+    height: auto;
+    margin: 0 auto;
+}
+
+h1,
+h1 span,
+h2,
+h3,
+h4 {
+    font-family: 'Instrument Serif', serif;
+    letter-spacing: 0.008em;
+}
+
+h1,
+h1 span {
+    font-size: clamp(15px, 2.7rem, 12vw);
+    line-height: 1.3em;
+}
+
+body {
+    font-size: 1.2rem;
+    margin: 0 1em;
+}
+
+/* Video sections container */
+main {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    width: 100%;
+    margin: 0 auto;
+    transform: translate(0, 0);
+}
+
+.video-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.video-container {
+    position: relative;
+    z-index: 50;
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-container img {
+    width: auto;
+    height: 100vh;
+    object-fit: contain;
+}
+
+.gray-panel {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 50%;
+    background-color: var(--main-bg-color);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+/* control how much of the center remains visible when panels are "mostly closed" */
+
+:root {
+    --panel-gap: 5vw;
+    /* visible center gap when panels are partially closed */
+}
+
+/* When a section has the partial-closed modifier, shrink panels to reveal a center gap */
+.video-section.partial-closed .gray-panel {
+    width: calc(50% - (var(--panel-gap) / 2));
+}
+
+/* When section is active (on screen), panels open (slide off-screen) */
+.video-section.active .gray-panel.left-panel {
+    transform: translateX(-100%);
+}
+
+.video-section.active .gray-panel.right-panel {
+    transform: translateX(100%);
+}
+
+/* Panels closing state for transition */
+.video-section .gray-panel.closing {
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@media screen and (min-width: 74em) {
+
+    .home-title-container h1 {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        align-content: space-between;
+        height: 80vh;
+    }
+
+    .home-title-3,
+    .home-title-4 {
+        text-align: right;
+    }
+}
+
+
+.project-info {}
+
+.project-text {
+    width: clamp(40ch, 40%, 50ch);
+
+}
+
+.project-text p:first-of-type {
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+    .project-info {
+        margin-right: 5%;
+    }
+}
+
+@media screen and (min-width: 768px) {}
+
+.curatorial-statement {
+    margin: 6em 3vw;
+    max-width: 65ch;
+}
+
+nav a,
+.curatorial-page nav a,
+nav p,
+.back-to-top {
+    transition: color 0.3s;
+    font-size: 0.8rem;
+}
+
+@media screen and (min-width: 768px) {
+    nav {
+        gap: 0.5em;
+    }
+}
+
+nav p {
+    margin: 0;
+    padding: 0;
+}
+
+
+a:hover {
+    color: var(--highlight-text-color);
+}
+
+.curatorial-statement h1 {
+    white-space: pre;
+}
+
+@media screen and (max-width: 768px) {
+    .curatorial-statement h1 {
+        white-space: normal;
+    }
+}
+
+.scroll-prompt p {
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    writing-mode: vertical-rl;
+}
+
+.scroll-prompt {
+    position: fixed;
+    bottom: 0;
+    right: 0.2em;
+    z-index: 99999;
+}
+
+@media screen and (min-width: 768px) {
+    .scroll-prompt {
+        right: 0;
+    }
+}
+
+.scroll-line {
+    margin-left: 1rem;
+    width: 1px;
+    height: 70px;
+    background-color: var(--main-text-color);
+    margin-top: 10px;
+}
+
+.scroll-icon {
+    display: block;
+    position: relative;
+    height: 3em;
+    width: 1.5em;
+    border: 1px solid #000;
+    border-radius: 1em;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid__item {}
+
+
+.echo-vid-1.video-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.video-16-9 {
+    aspect-ratio: 16/9;
+    width: 100%;
+    position: relative;
+    z-index: 50;
+}
+
+.video-9-16 {
+    aspect-ratio: 9/16;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 50;
+}
+
+.video-4-3 {
+    aspect-ratio: 4/3;
+    width: 80%;
+    position: relative;
+    z-index: 50;
+}
+
+
+/* Overlay */
+
+
+dialog[open] {
+    background: black;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    animation: fadeIn 0.8s ease normal;
+    display: flex;
+}
+
+dialog::backdrop {
+    background-color: black;
+}
+
+dialog#gnaw-overlay {
+    animation: none;
+}
+
+dialog#gnaw-overlay[open] {
+    height: fit-content;
+    background: transparent;
+}
+
+dialog#gnaw-overlay::backdrop {
+    background-color: transparent;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+dialog:not([open]) {
+    display: none !important;
+}
+
+.close-btn {
+    color: #dfd2a6;
+    padding: 1em;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+}
+
+@media screen and (max-width: 768px) {
+    .close-btn {
+        right: 1em;
+        left: auto;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    dialog[open] {
+        animation: none;
+    }
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    z-index: 1000;
+}
+
+/* Performance Stills */
+        :root {
+            --stripe-thickness: 1vw;
+        }
+
+        body.stills-body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            background: url("images/stripes/pink and green two.jpg") 0 0/contain no-repeat, url("images/stripes/gray\ six.jpg") center 100%/contain repeat;
+        }
+.stills-body nav a {
+    background-color: #453F45;
+    padding: 0 0.5em;
+    font-weight: 600;
+}
+        /* Fixed diagonal stripes overlay */
+        .stripe-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100%;
+            background: repeating-linear-gradient(50deg,
+                    #453F45 0,
+                    #453F45 var(--stripe-thickness),
+                    transparent var(--stripe-thickness),
+                    transparent calc(var(--stripe-thickness) * 2));
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Background image container */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .background-image {
+            width: 100%;
+            height: auto;
+            min-height: 100vh;
+            object-fit: cover;
+            will-change: transform;
+        }
+
+        /* Main content container */
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Gallery container */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 10vw;
+            max-width: 100%;
+        }
+
+        /* Individual columns */
+        .column {
+            flex: 0 0 35vw;
+            margin-top: 7vw;
+            display: flex;
+            flex-direction: column;
+            gap: 12vw;
+            will-change: transform;
+        }
+
+        .column-1 {
+            /* This column will scroll at 0.8x speed */
+        }
+
+        .column-2 {
+            /* This column will scroll at 0.6x speed */
+            margin-top: 40vh;
+            /* Offset start position */
+        }
+
+        /* Image items */
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+        }
