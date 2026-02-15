@@ -1,17 +1,60 @@
-.gray-panel {
-    position: absolute;
-    top: 0;
-    height: 100vh;
-    width: 50%;
-    /* default: panels cover the viewport when closed */
-    background-color: var(--main-bg-color);
-    z-index: 60;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.2s;
+@font-face {
+    font-family: 'Barlow Semi Condensed';
+    src: url('fonts/BarlowSemiCondensed-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
 }
+
+@font-face {
+    font-family: 'Barlow';
+    src: url('fonts/Barlow-SemiBoldItalic.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Barlow';
+    src: url('fonts/Barlow-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Barlow';
+    src: url('fonts/Barlow-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Barlow';
+    src: url('fonts/Barlow-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Instrument Serif';
+    src: url('fonts/InstrumentSerif-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Instrument Serif';
+    src: url('fonts/InstrumentSerif-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+
 
 /* Panels are positioned at their sides by default */
 .gray-panel.left-panel {
@@ -125,7 +168,7 @@ textarea:not([rows]) {
 /* CSS reset end */
 
 * {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: "Barlow", Helvetica, Arial, sans-serif;
     font-weight: 300;
     --main-bg-color: #453F45;
     --main-text-color: #dadbf1;
@@ -147,18 +190,23 @@ html {
     overflow: hidden;
 }
 
-header {
+.home-header {
     z-index: 101;
-    padding: 2em;
+    padding: 2vw;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     box-sizing: border-box;
+    transition: opacity 0.5s ease;
 }
 
+.home-header.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
 
-nav {
+nav.top-nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -167,6 +215,26 @@ nav {
     width: 100%;
     z-index: 100;
     top: 0;
+}
+
+nav.secondary-nav {
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    width: calc(100% - 2em);
+    z-index: 100;
+    position: fixed;
+    top: calc(50% - 4em);
+    text-align: center;
+}
+
+
+nav.secondary-nav a {
+    writing-mode: vertical-rl;
+}
+
+nav.secondary-nav a:nth-child(2) {
+    rotate: 180deg;
 }
 
 nav *,
@@ -203,8 +271,7 @@ h4 {
 
 h1,
 h1 span {
-    font-size: clamp(15px, 2.7rem, 12vw);
-    line-height: 1.3em;
+    font-size: clamp(15px, calc(1.5rem + 2vw), 12vw);
 }
 
 body {
@@ -213,12 +280,23 @@ body {
 }
 
 /* Video sections container */
-main.home-main {
-    scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
+main {
     width: 100%;
     margin: 0 auto;
     transform: translate(0, 0);
+
+    overscroll-behavior-y: contain;
+
+}
+
+.scroll-snap-section {
+    scroll-behavior: auto;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-y: contain;
+    width: 100%;
+    margin: 0 auto;
+    transform: translate(0, 0);
+
 }
 
 .video-section {
@@ -233,10 +311,11 @@ main.home-main {
     scroll-snap-stop: always;
 }
 
+
 .video-container {
     position: relative;
     z-index: 50;
-    max-width: 100%;
+    max-width: 70vw;
     max-height: 100%;
     height: 100%;
     display: flex;
@@ -244,8 +323,16 @@ main.home-main {
     justify-content: center;
 }
 
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: pan-y;
+}
+
 .video-container img {
     width: auto;
+    max-width: 100%;
     height: 100vh;
     object-fit: contain;
 }
@@ -279,16 +366,20 @@ main.home-main {
 
 /* When section is active (on screen), panels open (slide off-screen) */
 .video-section.active .gray-panel.left-panel {
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+
     transform: translateX(-100%);
 }
 
 .video-section.active .gray-panel.right-panel {
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+
     transform: translateX(100%);
 }
 
 /* Panels closing state for transition */
 .video-section .gray-panel.closing {
-    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @media screen and (min-width: 74em) {
@@ -334,11 +425,10 @@ main.home-main {
 }
 
 nav a,
-.curatorial-page nav a,
 nav p,
 .back-to-top {
     transition: color 0.3s;
-    font-size: 0.8rem;
+    font-family: "Barlow Condensed";
 }
 
 @media screen and (min-width: 768px) {
@@ -355,16 +445,6 @@ nav p {
 
 a:hover {
     color: var(--highlight-text-color);
-}
-
-.curatorial-statement h1 {
-    white-space: pre;
-}
-
-@media screen and (max-width: 768px) {
-    .curatorial-statement h1 {
-        white-space: normal;
-    }
 }
 
 .scroll-prompt p {
@@ -534,7 +614,7 @@ body.stills-body {
 .stills-body nav a {
     background-color: #453F45;
     padding: 0 0.5em;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 /* Fixed diagonal stripes overlay */

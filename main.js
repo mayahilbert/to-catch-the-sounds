@@ -1,6 +1,8 @@
 
 // Scroll-based panel management
 const videoSections = document.querySelectorAll('.video-section');
+const introText = document.querySelector('header');
+const secondaryNav = document.querySelector('.secondary-nav');
 let currentActiveSection = 0;
 let isScrolling = false;
 
@@ -8,6 +10,31 @@ const observerOptions = {
     threshold: 0.5,
     rootMargin: '0px'
 };
+
+document.querySelector('.back-to-top')?.addEventListener('click', (e) => {     // Reset all sections
+    // Scroll to top instantly
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    // Reset all sections
+    videoSections.forEach((s, i) => {
+        s.classList.remove('active');
+        s.classList.remove('partial-closed');
+        if (i === 0) {
+            s.classList.add('partial-closed');
+        }
+    });
+
+    // Reset state variables
+    currentActiveSection = 0;
+    hasInteracted = false;
+    isScrolling = false;
+
+    if (introText) {
+        introText.classList.remove('fade-out');
+        secondaryNav.style.display = 'none';
+
+    }
+})
 
 // do not auto-open panels until the user interacts
 let hasInteracted = false;
@@ -17,11 +44,11 @@ const sectionObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting && hasInteracted) {
             const sectionIndex = parseInt(entry.target.getAttribute('data-section'));
             const activeSection = document.querySelector('.video-section.active');
-            
+
             if (activeSection && activeSection !== entry.target) {
                 activeSection.classList.remove('active');
             }
-            
+
             entry.target.classList.add('active');
             currentActiveSection = sectionIndex;
         }
@@ -33,18 +60,25 @@ videoSections.forEach(section => {
 });
 
 // On load: reset scroll to top and set the first section to partially-closed
+// Also update the load event to ensure intro text is visible initially:
 window.addEventListener('load', () => {
-    // prevent the browser from restoring previous scroll position
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
-    try { window.scrollTo(0, 0); } catch (e) {}
-    // clear any accidental partial-closed classes and only add to first
+    try { window.scrollTo(0, 0); } catch (e) { }
     videoSections.forEach((s, i) => {
         s.classList.remove('partial-closed');
         if (i === 0) s.classList.add('partial-closed');
     });
+
+    // Ensure intro text is visible on load
+    if (introText) {
+        introText.classList.remove('fade-out');
+        secondaryNav.style.display = 'none';
+
+    }
 });
+
 
 
 // Scroll snapping with keyboard/wheel
@@ -61,15 +95,31 @@ document.addEventListener('wheel', (e) => {
     // If current section is not open, first scroll should open it (no snapping)
     const isOpen = currentSectionEl && currentSectionEl.classList.contains('active');
 
+    // Check if we're at an edge trying to scroll further
+    const isAtTopEdge = currentActiveSection === 0 && direction < 0;
+    const isAtBottomEdge = currentActiveSection === videoSections.length - 1 && direction > 0;
+
+    // If at edge and trying to scroll further, do nothing
+    if (isAtTopEdge || isAtBottomEdge) {
+        return;
+    }
     if (!isOpen) {
+
         // open current section (panels slide off-screen)
         if (currentSectionEl) {
             currentSectionEl.classList.remove('partial-closed');
             currentSectionEl.classList.add('active');
+
+            // Hide intro text when first section opens
+
+            if (introText) {
+                introText.classList.add('fade-out');
+                secondaryNav.style.display = 'flex';
+
+            }
         }
         isScrolling = true;
-        // lock while open animation runs
-        setTimeout(() => { isScrolling = false; }, 800);
+        setTimeout(() => { isScrolling = false; }, 100);
         return;
     }
 
@@ -86,17 +136,25 @@ document.addEventListener('wheel', (e) => {
     // Wait for panels to close animation, then snap to next and open it
     setTimeout(() => {
         if (nextSection !== currentActiveSection) {
-            videoSections[nextSection].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            videoSections[nextSection].scrollIntoView({ behavior: 'auto', block: 'start' });
             currentActiveSection = nextSection;
             // open new section after scroll has started
             setTimeout(() => {
                 const newEl = videoSections[currentActiveSection];
+                console.log(direction);
                 if (newEl) {
                     // If we've returned to the very first section (index 0) via scrolling up,
                     // keep it partially-closed instead of fully open.
                     if (currentActiveSection === 0 && direction < 0) {
                         newEl.classList.remove('active');
                         newEl.classList.add('partial-closed');
+
+                        if (introText) {
+                            introText.classList.remove('fade-out');
+                            secondaryNav.style.display = 'none';
+                        }
+
+
                     } else {
                         newEl.classList.remove('partial-closed');
                         newEl.classList.add('active');
@@ -116,108 +174,3 @@ document.addEventListener('wheel', (e) => {
     }, 800);
 }, { passive: false });
 
-document.addEventListener("DOMContentLoaded", () => {
-    //Start overlay
-
-    const dialogs = document.querySelectorAll("dialog");
-
-    function openDialog(dialog, theme) {
-        console.log("open dialog")
-        if (theme == "light") {
-            document.querySelector("#homepage").classList.add('overlay-open-light');
-        } else {
-            document.querySelector("#homepage").classList.add('overlay-open');
-        }
-
-        dialog.showModal();
-        history.pushState({ dialogId: dialog.id }, ""); // store which dialog is open
-        if (dialog.querySelectorAll("iframe")[0]) {
-            var vimeoPlayer = new Vimeo.Player(dialog.querySelectorAll("iframe")[0]);
-            vimeoPlayer.play();
-        }
-
-    }
-
-    function closeDialog(dialog) {
-        dialog.close();
-        console.log("close dialog")
-        if (dialog.querySelectorAll("iframe")[0]) {
-            var vimeoPlayer = new Vimeo.Player(dialog.querySelectorAll("iframe")[0]);
-            vimeoPlayer.pause();
-        }
-        document.querySelector("#homepage").classList.remove('overlay-open');
-        document.querySelector("#homepage").classList.remove('overlay-open-light');
-    }
-
-    const minderOpenEl = document.getElementById("minders-open");
-    if (minderOpenEl) {
-        minderOpenEl.addEventListener("click", () => {
-            console.log("clicked minders")
-            openDialog(document.getElementById("minders-overlay"));
-        });
-    }
-
-    const usageOpenEl = document.getElementById("usage-open");
-    if (usageOpenEl) {
-        usageOpenEl.addEventListener("click", () => {
-            console.log("clicked usage")
-            openDialog(document.getElementById("usage-overlay"));
-        });
-    }
-
-    const clingOpenEl = document.getElementById("cling-open");
-    if (clingOpenEl) {
-        clingOpenEl.addEventListener("click", () => {
-            console.log("clicked cling")
-            openDialog(document.getElementById("cling-overlay"));
-        });
-    }
-
-    const dosOpenEl = document.getElementById("dos-open");
-    if (dosOpenEl) {
-        dosOpenEl.addEventListener("click", () => {
-            console.log("clicked dos")
-            openDialog(document.getElementById("dos-overlay"));
-        });
-    }
-
-    let gnawImgs = document.querySelectorAll(".floating-img");
-    gnawImgs.forEach((gnawImg) => {
-        gnawImg.addEventListener("click", () => {
-            const gnawMain = document.getElementById("gnaw-main");
-            if (gnawMain) {
-                gnawMain.setAttribute('src', gnawImg.getAttribute('src'));
-            }
-            console.log("clicked gnaw")
-            openDialog(document.getElementById("gnaw-overlay"), "light");
-        });
-    });
-    
-    // Close buttons
-    let closeBtns = document.querySelectorAll(".close-btn")
-
-    closeBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            closeDialog(btn.closest("dialog"));
-        });
-    });
-    let gnawOverlay = document.getElementById("gnaw-overlay");
-    if (gnawOverlay) {
-        gnawOverlay.addEventListener('click', function (event) {
-            console.log("clicked outside dialog")
-            closeDialog(gnawOverlay);
-        });
-    }
-    // Handle back/forward navigation
-    window.addEventListener("popstate", (event) => {
-        const openStates = Array.from(dialogs).filter(d => d.open);
-
-        if (event.state && event.state.dialogId) {
-            const dlg = document.getElementById(event.state.dialogId);
-            if (!dlg.open) dlg.openDialog();
-        } else if (openStates.length) {
-            closeDialog(openStates[openStates.length - 1]);
-        }
-    });
-    //End overlay
-});

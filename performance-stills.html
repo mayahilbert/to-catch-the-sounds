@@ -4,49 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Performance Stills - Colleen Asper: to catch the sounds that she can then give back with her own voice</title>
+    <title>Performance Stills - Colleen Asper: to catch the sounds that she can then give back with her own voice
+    </title>
     <link rel="stylesheet" href="main.css?v=1.1">
 
 </head>
 
 <body class="stills-body">
-<header>
-        <nav>
+    <header class="home-header">
+        <nav class="top-nav">
             <a href="index.html">Back to Works</a>
             <a href="https://newmediaartspace.info">New Media Artspace</a>
         </nav>
     </header>
     <main>
 
-    <!-- Fixed diagonal stripes overlay -->
-    <div class="stripe-overlay"></div>
-    <!-- Main content -->
-    <div class="content">
-        <div class="gallery">
-            <!-- Column 1 (scrolls at 0.8x speed) -->
-            <div class="column column-1">
-                <div class="gallery-item">
-                    <img src="images/Colleen Asper wall.jpg" alt="Gallery image 1">
-                </div>
-               
-                <div class="gallery-item">
-                    <img src="images/Colleen Asper wall 3.jpg" alt="Gallery image 2">
-                </div> <div class="gallery-item">
-                    <img src="images/Colleen Asper mouth transition.jpg" alt="Gallery image 1">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/Colleen Asper wall 4.jpg" alt="Gallery image 3">
+        <!-- Fixed diagonal stripes overlay -->
+        <div class="stripe-overlay"></div>
+        <!-- Main content -->
+        <div class="content">
+            <div class="gallery">
+                <!-- Column 1 (scrolls at 0.8x speed) -->
+                <div class="column column-1">
+                    <div class="gallery-item">
+                        <img src="images/Colleen Asper wall.jpg" alt="Gallery image 1">
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="images/Colleen Asper wall 3.jpg" alt="Gallery image 2">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/Colleen Asper mouth transition.jpg" alt="Gallery image 1">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/Colleen Asper wall 4.jpg" alt="Gallery image 3">
+                    </div>
+
                 </div>
 
-            </div>
-
-            <!-- Column 2 (scrolls at 0.6x speed) -->
-            <div class="column column-2">
-                <div class="gallery-item">
-                    <img src="images/Colleen Asper wall with performer.jpg" alt="Gallery image 4">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/Colleen Asper mouth performer.jpg" alt="Gallery image 6"></div>
+                <!-- Column 2 (scrolls at 0.6x speed) -->
+                <div class="column column-2">
+                    <div class="gallery-item">
+                        <img src="images/Colleen Asper wall with performer.jpg" alt="Gallery image 4">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/Colleen Asper mouth performer.jpg" alt="Gallery image 6">
+                    </div>
                     <div class="gallery-item">
                         <img src="images/Colleen Asper wall 2.jpg" alt="Gallery image 4">
                     </div>
@@ -54,49 +57,49 @@
                         <img src="images/Colleen Asper reading music.jpg" alt="Gallery image 5">
                     </div>
 
-                
+
+                </div>
             </div>
-        </div>
 
-        <script>
-            // Parallax scrolling effect
-            let lastScrollY = window.scrollY;
-            let ticking = false;
+            <script>
+                // Parallax scrolling effect
+                let lastScrollY = window.scrollY;
+                let ticking = false;
 
-            const backgroundImage = document.querySelector('body');
-            const column1 = document.querySelector('.column-1');
-            const column2 = document.querySelector('.column-2');
+                const backgroundImage = document.querySelector('body');
+                const column1 = document.querySelector('.column-1');
+                const column2 = document.querySelector('.column-2');
 
-            function updateParallax() {
-                const scrollY = window.scrollY;
+                function updateParallax() {
+                    const scrollY = window.scrollY;
 
-                // Background scrolls 2x faster (moves up faster, revealing more of image)
-                var yOffset = window.scrollY * 1.5;
+                    // Background scrolls 2x faster (moves up faster, revealing more of image)
+                    var yOffset = window.scrollY * 1.5;
 
-                backgroundImage.style.backgroundPosition = '0 ' + -yOffset + 'px, 0 ' + (-yOffset * 0.5) + 'px';
-                // Column 1 scrolls slower (0.8x) - negative value to slow it down
-                column1.style.transform = `translateY(${scrollY * -0.2}px)`;
+                    backgroundImage.style.backgroundPosition = '0 ' + -yOffset + 'px, 0 ' + (-yOffset * 0.5) + 'px';
+                    // Column 1 scrolls slower (0.8x) - negative value to slow it down
+                    column1.style.transform = `translateY(${scrollY * -0.2}px)`;
 
-                // Column 2 scrolls even slower (0.6x)
-                column2.style.transform = `translateY(${scrollY * -0.4}px)`;
+                    // Column 2 scrolls even slower (0.6x)
+                    column2.style.transform = `translateY(${scrollY * -0.4}px)`;
 
-                ticking = false;
-            }
-
-            function onScroll() {
-                lastScrollY = window.scrollY;
-
-                if (!ticking) {
-                    window.requestAnimationFrame(updateParallax);
-                    ticking = true;
+                    ticking = false;
                 }
-            }
 
-            window.addEventListener('scroll', onScroll, { passive: true });
+                function onScroll() {
+                    lastScrollY = window.scrollY;
 
-            // Initial call
-            updateParallax();
-        </script>
+                    if (!ticking) {
+                        window.requestAnimationFrame(updateParallax);
+                        ticking = true;
+                    }
+                }
+
+                window.addEventListener('scroll', onScroll, { passive: true });
+
+                // Initial call
+                updateParallax();
+            </script>
 </body>
 
 </html>
