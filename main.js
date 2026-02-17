@@ -1,4 +1,3 @@
-
 // Scroll-based panel management
 const videoSections = document.querySelectorAll('.video-section');
 const introText = document.querySelector('header');
@@ -11,7 +10,7 @@ const observerOptions = {
     rootMargin: '0px'
 };
 
-document.querySelector('.back-to-top')?.addEventListener('click', (e) => {     // Reset all sections
+document.querySelector('.back-to-top')?.addEventListener('click', (e) => {
     // Scroll to top instantly
     window.scrollTo({ top: 0, behavior: 'auto' });
 
@@ -32,9 +31,8 @@ document.querySelector('.back-to-top')?.addEventListener('click', (e) => {     /
     if (introText) {
         introText.classList.remove('fade-out');
         secondaryNav.style.display = 'none';
-
     }
-})
+});
 
 // do not auto-open panels until the user interacts
 let hasInteracted = false;
@@ -60,7 +58,6 @@ videoSections.forEach(section => {
 });
 
 // On load: reset scroll to top and set the first section to partially-closed
-// Also update the load event to ensure intro text is visible initially:
 window.addEventListener('load', () => {
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
@@ -75,47 +72,41 @@ window.addEventListener('load', () => {
     if (introText) {
         introText.classList.remove('fade-out');
         secondaryNav.style.display = 'none';
-
     }
 });
 
-
-
-// Scroll snapping with keyboard/wheel
-let scrollTimeout;
-document.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    // mark that the user has interacted so the observer will open panels
-    hasInteracted = true;
+// ============================================
+// UNIFIED NAVIGATION FUNCTION
+// ============================================
+function navigateSections(direction) {
     if (isScrolling) return;
-
-    const direction = e.deltaY > 0 ? 1 : -1;
+    
+    hasInteracted = true;
     const currentSectionEl = videoSections[currentActiveSection];
-
-    // If current section is not open, first scroll should open it (no snapping)
     const isOpen = currentSectionEl && currentSectionEl.classList.contains('active');
 
     // Check if we're at an edge trying to scroll further
     const isAtTopEdge = currentActiveSection === 0 && direction < 0;
     const isAtBottomEdge = currentActiveSection === videoSections.length - 1 && direction > 0;
-
-    // If at edge and trying to scroll further, do nothing
+    
+    if (isAtTopEdge) {
+        introText.classList.remove('fade-out');
+        secondaryNav.style.display = 'none';
+    }
     if (isAtTopEdge || isAtBottomEdge) {
         return;
     }
-    if (!isOpen) {
 
+    if (!isOpen) {
         // open current section (panels slide off-screen)
         if (currentSectionEl) {
             currentSectionEl.classList.remove('partial-closed');
             currentSectionEl.classList.add('active');
 
             // Hide intro text when first section opens
-
             if (introText) {
                 introText.classList.add('fade-out');
                 secondaryNav.style.display = 'flex';
-
             }
         }
         isScrolling = true;
@@ -138,10 +129,10 @@ document.addEventListener('wheel', (e) => {
         if (nextSection !== currentActiveSection) {
             videoSections[nextSection].scrollIntoView({ behavior: 'auto', block: 'start' });
             currentActiveSection = nextSection;
+            
             // open new section after scroll has started
             setTimeout(() => {
                 const newEl = videoSections[currentActiveSection];
-                console.log(direction);
                 if (newEl) {
                     // If we've returned to the very first section (index 0) via scrolling up,
                     // keep it partially-closed instead of fully open.
@@ -153,8 +144,6 @@ document.addEventListener('wheel', (e) => {
                             introText.classList.remove('fade-out');
                             secondaryNav.style.display = 'none';
                         }
-
-
                     } else {
                         newEl.classList.remove('partial-closed');
                         newEl.classList.add('active');
@@ -172,5 +161,137 @@ document.addEventListener('wheel', (e) => {
             }
         }
     }, 800);
+}
+
+// ============================================
+// MOUSE WHEEL SUPPORT
+// ============================================
+document.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const direction = e.deltaY > 0 ? 1 : -1;
+    navigateSections(direction);
 }, { passive: false });
 
+// ============================================
+// CLICK SUPPORT
+// ============================================
+videoSections.forEach((section, index) => {
+    section.addEventListener('click', (e) => {
+        // Prevent clicks on interactive elements from triggering navigation
+        if (e.target.closest('a, button, input, textarea, select, video')) {
+            return;
+        }
+
+        const isCurrentActive = section.classList.contains('active');
+        const isCurrentSection = currentActiveSection === index;
+
+        if (!isCurrentSection) {
+            // Clicked on a different section - navigate to it
+            const direction = index > currentActiveSection ? 1 : -1;
+            navigateSections(direction);
+        } else if (!isCurrentActive) {
+            // Clicked on current section but it's not open - open it
+            navigateSections(0); // This will open without moving
+        } else {
+            // Clicked on current open section - move to next
+            navigateSections(1);
+        }
+    });
+});
+
+// ============================================
+// DRAG SUPPORT (Mouse & Touch)
+// ============================================
+let dragState = {
+    isDragging: false,
+    startY: 0,
+    startTime: 0,
+    currentY: 0,
+    threshold: 50, // pixels to trigger navigation
+    slowDragTime: 300, // ms - anything slower than this is a "slow drag"
+};
+
+// Mouse drag
+document.addEventListener('mousedown', (e) => {
+    // Don't interfere with text selection or interactive elements
+    if (e.target.closest('a, button, input, textarea, select')) {
+        return;
+    }
+    
+    dragState.isDragging = true;
+    dragState.startY = e.clientY;
+    dragState.currentY = e.clientY;
+    dragState.startTime = Date.now();
+    
+    // Prevent text selection during drag
+    e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!dragState.isDragging) return;
+    dragState.currentY = e.clientY;
+});
+
+document.addEventListener('mouseup', (e) => {
+    if (!dragState.isDragging) return;
+    
+    const deltaY = dragState.startY - dragState.currentY;
+    const deltaTime = Date.now() - dragState.startTime;
+    const absDelta = Math.abs(deltaY);
+    
+    // Check if drag exceeds threshold
+    if (absDelta > dragState.threshold) {
+        const direction = deltaY > 0 ? 1 : -1; // Drag up = scroll down (next)
+        navigateSections(direction);
+    }
+    
+    dragState.isDragging = false;
+});
+
+// Touch drag
+let touchState = {
+    isTouching: false,
+    startY: 0,
+    startTime: 0,
+    currentY: 0,
+};
+
+document.addEventListener('touchstart', (e) => {
+    // Don't interfere with interactive elements
+    if (e.target.closest('a, button, input, textarea, select')) {
+        return;
+    }
+    
+    touchState.isTouching = true;
+    touchState.startY = e.touches[0].clientY;
+    touchState.currentY = e.touches[0].clientY;
+    touchState.startTime = Date.now();
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+    if (!touchState.isTouching) return;
+    touchState.currentY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+    if (!touchState.isTouching) return;
+    
+    const deltaY = touchState.startY - touchState.currentY;
+    const deltaTime = Date.now() - touchState.startTime;
+    const absDelta = Math.abs(deltaY);
+    
+    // Check if swipe exceeds threshold
+    if (absDelta > dragState.threshold) {
+        const direction = deltaY > 0 ? 1 : -1; // Swipe up = scroll down (next)
+        navigateSections(direction);
+    }
+    
+    touchState.isTouching = false;
+}, { passive: true });
+
+// Prevent default touch behavior on the document to avoid conflicts
+document.addEventListener('touchmove', (e) => {
+    if (dragState.isDragging || touchState.isTouching) {
+        e.preventDefault();
+    }
+}, { passive: false });
