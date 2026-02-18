@@ -65,14 +65,17 @@ window.addEventListener('load', () => {
     try { window.scrollTo(0, 0); } catch (e) { }
     videoSections.forEach((s, i) => {
         s.classList.remove('partial-closed');
-        if (i === 0) s.classList.add('partial-closed');
+        if (i === 0) {
+            s.classList.add('partial-closed');
+            // Ensure intro text is visible on load
+            if (introText) {
+                introText.classList.remove('fade-out');
+                secondaryNav.style.display = 'none';
+            }
+        }
     });
 
-    // Ensure intro text is visible on load
-    if (introText) {
-        introText.classList.remove('fade-out');
-        secondaryNav.style.display = 'none';
-    }
+
 });
 
 // ============================================
@@ -80,7 +83,7 @@ window.addEventListener('load', () => {
 // ============================================
 function navigateSections(direction) {
     if (isScrolling) return;
-    
+
     hasInteracted = true;
     const currentSectionEl = videoSections[currentActiveSection];
     const isOpen = currentSectionEl && currentSectionEl.classList.contains('active');
@@ -88,11 +91,16 @@ function navigateSections(direction) {
     // Check if we're at an edge trying to scroll further
     const isAtTopEdge = currentActiveSection === 0 && direction < 0;
     const isAtBottomEdge = currentActiveSection === videoSections.length - 1 && direction > 0;
-    
+
     if (isAtTopEdge) {
-        introText.classList.remove('fade-out');
-        secondaryNav.style.display = 'none';
+    introText.classList.remove('fade-out');
+    secondaryNav.style.display = 'none';
+    // Close the first section back to partial-closed
+    if (currentSectionEl && currentSectionEl.classList.contains('active')) {
+        currentSectionEl.classList.remove('active');
+        currentSectionEl.classList.add('partial-closed');
     }
+}
     if (isAtTopEdge || isAtBottomEdge) {
         return;
     }
@@ -129,7 +137,7 @@ function navigateSections(direction) {
         if (nextSection !== currentActiveSection) {
             videoSections[nextSection].scrollIntoView({ behavior: 'auto', block: 'start' });
             currentActiveSection = nextSection;
-            
+
             // open new section after scroll has started
             setTimeout(() => {
                 const newEl = videoSections[currentActiveSection];
@@ -217,12 +225,12 @@ document.addEventListener('mousedown', (e) => {
     if (e.target.closest('a, button, input, textarea, select')) {
         return;
     }
-    
+
     dragState.isDragging = true;
     dragState.startY = e.clientY;
     dragState.currentY = e.clientY;
     dragState.startTime = Date.now();
-    
+
     // Prevent text selection during drag
     e.preventDefault();
 });
@@ -234,17 +242,17 @@ document.addEventListener('mousemove', (e) => {
 
 document.addEventListener('mouseup', (e) => {
     if (!dragState.isDragging) return;
-    
+
     const deltaY = dragState.startY - dragState.currentY;
     const deltaTime = Date.now() - dragState.startTime;
     const absDelta = Math.abs(deltaY);
-    
+
     // Check if drag exceeds threshold
     if (absDelta > dragState.threshold) {
         const direction = deltaY > 0 ? 1 : -1; // Drag up = scroll down (next)
         navigateSections(direction);
     }
-    
+
     dragState.isDragging = false;
 });
 
@@ -261,7 +269,7 @@ document.addEventListener('touchstart', (e) => {
     if (e.target.closest('a, button, input, textarea, select')) {
         return;
     }
-    
+
     touchState.isTouching = true;
     touchState.startY = e.touches[0].clientY;
     touchState.currentY = e.touches[0].clientY;
@@ -275,17 +283,17 @@ document.addEventListener('touchmove', (e) => {
 
 document.addEventListener('touchend', (e) => {
     if (!touchState.isTouching) return;
-    
+
     const deltaY = touchState.startY - touchState.currentY;
     const deltaTime = Date.now() - touchState.startTime;
     const absDelta = Math.abs(deltaY);
-    
+
     // Check if swipe exceeds threshold
     if (absDelta > dragState.threshold) {
         const direction = deltaY > 0 ? 1 : -1; // Swipe up = scroll down (next)
         navigateSections(direction);
     }
-    
+
     touchState.isTouching = false;
 }, { passive: true });
 
@@ -295,3 +303,70 @@ document.addEventListener('touchmove', (e) => {
         e.preventDefault();
     }
 }, { passive: false });
+
+const firstSection = videoSections[0];
+const header = document.querySelector('header');
+if (firstSection && header) {
+    header.addEventListener('click', (e) => {
+        console.log('First section clicked');
+        if (e.target.closest('a, button, input, textarea, select')) {
+            return;
+        }
+        // Only open if it's partial-closed (not already active)
+        if (firstSection.classList.contains('partial-closed')) {
+            hasInteracted = true;
+            firstSection.classList.remove('partial-closed');
+            firstSection.classList.add('active');
+
+            // Hide intro text
+            if (introText) {
+                introText.classList.add('fade-out');
+                secondaryNav.style.display = 'flex';
+            }
+        }
+    });
+}
+
+/* INFO TOOLTIP MANAGEMENT */
+function isSmall() { return window.matchMedia('(max-width: 800px)').matches; }
+
+document.querySelectorAll('.info-wrap').forEach(wrap => {
+    const btn = wrap.querySelector('.info-btn');
+    const tip = document.getElementById(btn.getAttribute('aria-describedby'));
+
+    function show() { tip.removeAttribute('hidden'); btn.setAttribute('aria-expanded', 'true'); }
+    function hide() { tip.setAttribute('hidden', ''); btn.setAttribute('aria-expanded', 'false'); }
+
+    let closeTimer;
+    function scheduleHide() { closeTimer = setTimeout(hide, 100); }
+    function cancelHide() { clearTimeout(closeTimer); }
+
+    btn.addEventListener('click', () => tip.hidden ? show() : hide());
+    btn.addEventListener('mouseenter', show);
+    tip.addEventListener('mouseenter', show);
+    btn.addEventListener('mouseleave', scheduleHide);
+    tip.addEventListener('mouseleave', scheduleHide);
+    btn.addEventListener('mouseenter', cancelHide);
+    tip.addEventListener('mouseenter', cancelHide);
+    btn.addEventListener('focus', show);
+    btn.addEventListener('blur', hide);
+});
+
+// Escape closes all
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('[role="tooltip"]').forEach(tip => tip.hidden = true);
+        document.querySelectorAll('.info-btn').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+    }
+});
+
+// On load and resize, remove hidden on large screens so CSS takes over
+function syncLargeScreen() {
+    const isLarge = window.matchMedia('(min-width: 768px)').matches;
+    document.querySelectorAll('[role="tooltip"]').forEach(tip => {
+        isLarge ? tip.removeAttribute('hidden') : tip.setAttribute('hidden', '');
+    });
+}
+
+window.matchMedia('(min-width: 768px)').addEventListener('change', syncLargeScreen);
+syncLargeScreen();
