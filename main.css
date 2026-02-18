@@ -782,7 +782,9 @@ body.stills-body {
 [role="tooltip"][hidden] {
     display: none;
 }
-
+[role="tooltip"] h2 {
+    all: unset;
+}
 @media (min-width: 900px) {
     .info-wrap {
         z-index: 20;
