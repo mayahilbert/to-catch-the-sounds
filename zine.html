@@ -9,17 +9,49 @@
     <link rel="stylesheet" href="main.css?v=1.1">
 </head>
 
-<body class="curatorial-page">
-    <header>
-        <nav class="top-nav">
-            <a href="index.html">Back to Works</a>
-            <a href="https://newmediaartspace.info">New Media Artspace</a>
+<body class="curatorial-page striped-bg">
+       <a href="#main" class="skip-to-main-content-link">Skip to main content</a> 
+<!-- Fixed diagonal stripes overlay -->
+        <div class="stripe-overlay" id="stripe-overlay"></div>
+    <header class="home-header">
+        <!-- Live region: announces state changes to screen readers -->
+        <div id="liveRegion" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+        <nav class="top-nav striped-bg-nav">
+            <div class="switch-row">
+                <div class="warning-wrapper" id="warningWrapper">
+                    <div class="warning-notice" role="note">
+                        <span>
+                            <strong>Photosensitivity warning</strong>: The background contains high contrast, flashing
+                            patterns.
+                        </span>
+                    </div>
+                </div>
+                <div class="switch-toggle-wrapper">
+                    <div class="switch-label-group">
+
+                        <label class="switch-label" for="animToggle">
+                            Enable background
+                        </label>
+                    </div>
+
+                    <div class="switch-wrapper">
+                        <input type="checkbox" id="animToggle" class="switch-input" role="switch">
+                        <span class="switch-track" aria-hidden="true">
+                            <span class="switch-thumb"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="striped-nav-sub">
+                <a href="index.html">Back to Works</a>
+                <a href="https://newmediaartspace.info">New Media Artspace</a>
+            </div>
         </nav>
     </header>
-    <main>
-        <article class="curatorial-statement">
-        </article>
+    <main id="main">
+        <div style="height:500vh"></div>
     </main>
+    <script src="striped-bg.js"></script>
 </body>
 
 </html>

@@ -4,35 +4,13 @@ const introText = document.querySelector('header');
 const secondaryNav = document.querySelector('.secondary-nav');
 let currentActiveSection = 0;
 let isScrolling = false;
+let isDialogOpen = false;
 
 const observerOptions = {
     threshold: 0.5,
     rootMargin: '0px'
 };
 
-document.querySelector('.back-to-top')?.addEventListener('click', (e) => {
-    // Scroll to top instantly
-    window.scrollTo({ top: 0, behavior: 'auto' });
-
-    // Reset all sections
-    videoSections.forEach((s, i) => {
-        s.classList.remove('active');
-        s.classList.remove('partial-closed');
-        if (i === 0) {
-            s.classList.add('partial-closed');
-        }
-    });
-
-    // Reset state variables
-    currentActiveSection = 0;
-    hasInteracted = false;
-    isScrolling = false;
-
-    if (introText) {
-        introText.classList.remove('fade-out');
-        secondaryNav.style.display = 'none';
-    }
-});
 
 // do not auto-open panels until the user interacts
 let hasInteracted = false;
@@ -74,15 +52,21 @@ window.addEventListener('load', () => {
             }
         }
     });
-
+    window.addEventListener('scroll', () => {
+        if (isProgrammaticScroll) return;
+        hasInteracted = true;
+    });
 
 });
 
 // ============================================
 // UNIFIED NAVIGATION FUNCTION
 // ============================================
+
+let isProgrammaticScroll = false;
+
 function navigateSections(direction) {
-    if (isScrolling) return;
+    if (isScrolling || isDialogOpen) return;
 
     hasInteracted = true;
     const currentSectionEl = videoSections[currentActiveSection];
@@ -93,14 +77,14 @@ function navigateSections(direction) {
     const isAtBottomEdge = currentActiveSection === videoSections.length - 1 && direction > 0;
 
     if (isAtTopEdge) {
-    introText.classList.remove('fade-out');
-    secondaryNav.style.display = 'none';
-    // Close the first section back to partial-closed
-    if (currentSectionEl && currentSectionEl.classList.contains('active')) {
-        currentSectionEl.classList.remove('active');
-        currentSectionEl.classList.add('partial-closed');
+        introText.classList.remove('fade-out');
+        secondaryNav.style.display = 'none';
+        // Close the first section back to partial-closed
+        if (currentSectionEl && currentSectionEl.classList.contains('active')) {
+            currentSectionEl.classList.remove('active');
+            currentSectionEl.classList.add('partial-closed');
+        }
     }
-}
     if (isAtTopEdge || isAtBottomEdge) {
         return;
     }
@@ -175,6 +159,10 @@ function navigateSections(direction) {
 // MOUSE WHEEL SUPPORT
 // ============================================
 document.addEventListener('wheel', (e) => {
+    if (isDialogOpen) {
+        e.preventDefault();
+        return;
+    }
     e.preventDefault();
     const direction = e.deltaY > 0 ? 1 : -1;
     navigateSections(direction);
@@ -186,7 +174,7 @@ document.addEventListener('wheel', (e) => {
 videoSections.forEach((section, index) => {
     section.addEventListener('click', (e) => {
         // Prevent clicks on interactive elements from triggering navigation
-        if (e.target.closest('a, button, input, textarea, select, video')) {
+        if (e.target.closest('a, button, input, textarea, select, video, iframe, .video-container')) {
             return;
         }
 
@@ -221,6 +209,7 @@ let dragState = {
 
 // Mouse drag
 document.addEventListener('mousedown', (e) => {
+    if (isDialogOpen) return;
     // Don't interfere with text selection or interactive elements
     if (e.target.closest('a, button, input, textarea, select')) {
         return;
@@ -265,8 +254,9 @@ let touchState = {
 };
 
 document.addEventListener('touchstart', (e) => {
+    if (isDialogOpen) return;
     // Don't interfere with interactive elements
-    if (e.target.closest('a, button, input, textarea, select')) {
+    if (e.target.closest('a, button, input, textarea, select, video, iframe, .video-container')) {
         return;
     }
 
@@ -340,16 +330,17 @@ document.querySelectorAll('.info-wrap').forEach(wrap => {
     let closeTimer;
     function scheduleHide() { closeTimer = setTimeout(hide, 100); }
     function cancelHide() { clearTimeout(closeTimer); }
-
-    btn.addEventListener('click', () => tip.hidden ? show() : hide());
-    btn.addEventListener('mouseenter', show);
-    tip.addEventListener('mouseenter', show);
-    btn.addEventListener('mouseleave', scheduleHide);
-    tip.addEventListener('mouseleave', scheduleHide);
-    btn.addEventListener('mouseenter', cancelHide);
-    tip.addEventListener('mouseenter', cancelHide);
-    btn.addEventListener('focus', show);
-    btn.addEventListener('blur', hide);
+    if (isSmall()) {
+        btn.addEventListener('click', () => tip.hidden ? show() : hide());
+        btn.addEventListener('mouseenter', show);
+        tip.addEventListener('mouseenter', show);
+        btn.addEventListener('mouseleave', scheduleHide);
+        tip.addEventListener('mouseleave', scheduleHide);
+        btn.addEventListener('mouseenter', cancelHide);
+        tip.addEventListener('mouseenter', cancelHide);
+        btn.addEventListener('focus', show);
+        btn.addEventListener('blur', hide);
+    }
 });
 
 // Escape closes all
@@ -370,3 +361,123 @@ function syncLargeScreen() {
 
 window.matchMedia('(min-width: 768px)').addEventListener('change', syncLargeScreen);
 syncLargeScreen();
+
+
+
+document.querySelector('.back-to-top')?.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent bubbling to section click handler
+    e.preventDefault();
+
+    // Kill observer and scrolling state immediately
+    sectionObserver.disconnect();
+    isScrolling = false;
+    isDialogOpen = false;
+    hasInteracted = false;
+    isProgrammaticScroll = true;
+    currentActiveSection = 0;
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    // Reset UI
+    if (introText) {
+        introText.classList.remove('fade-out');
+        secondaryNav.style.display = 'none';
+    }
+
+    // Wipe all section states now...
+    videoSections.forEach((s, i) => {
+        s.classList.remove('active', 'partial-closed');
+        if (i === 0) s.classList.add('partial-closed');
+    });
+
+    // ...and again after any async handlers have fired
+    setTimeout(() => {
+        videoSections.forEach((s, i) => {
+            s.classList.remove('active', 'partial-closed');
+            if (i === 0) s.classList.add('partial-closed');
+        });
+
+        hasInteracted = false;
+        isProgrammaticScroll = false;
+        isScrolling = false;
+
+        // Reconnect observer only after everything has settled
+        videoSections.forEach(section => sectionObserver.observe(section));
+    }, 900); // slightly longer than your longest animation (800ms)
+});
+
+// Overlay system
+function openDialog(dialog) {
+    isDialogOpen = true;
+    const scrollY = window.scrollY;
+    document.body.dataset.scrollY = scrollY;
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.querySelector("#homepage").classList.add("overlay-open");
+    dialog.showModal();
+    history.pushState({ dialogId: dialog.id }, "");
+    const iframe = dialog.querySelector("iframe");
+    if (iframe) new Vimeo.Player(iframe).play();
+}
+
+function closeDialog(dialog) {
+    isDialogOpen = false;
+    const scrollY = document.body.dataset.scrollY;
+
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+
+    window.scrollTo(0, parseInt(scrollY || 0));
+    dialog.close();
+    const iframe = dialog.querySelector("iframe");
+    if (iframe) new Vimeo.Player(iframe).pause();
+    document.querySelector("#homepage").classList.remove("overlay-open");
+}
+
+// Open triggers — add data-dialog-target="overlayId" to any button
+document.querySelectorAll("[data-dialog-target]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const dialog = document.getElementById(btn.dataset.dialogTarget);
+        if (dialog) openDialog(dialog);
+    });
+});
+
+// Close buttons inside dialogs
+document.querySelectorAll(".close-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        closeDialog(btn.closest("dialog"));
+    });
+});
+
+// Click outside (on backdrop) to close
+document.querySelectorAll("dialog.overlay").forEach((dialog) => {
+    dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) closeDialog(dialog);
+    });
+});
+
+// Pause video when closed via Escape key
+document.querySelectorAll("dialog.overlay").forEach((dialog) => {
+    dialog.addEventListener("close", () => {
+        const iframe = dialog.querySelector("iframe");
+        if (iframe) new Vimeo.Player(iframe).pause();
+        document.querySelector("#homepage").classList.remove("overlay-open");
+    });
+});
+
+// Handle back/forward navigation
+window.addEventListener("popstate", (event) => {
+    const openDialogs = Array.from(document.querySelectorAll("dialog[open]"));
+    if (event.state?.dialogId) {
+        const dlg = document.getElementById(event.state.dialogId);
+        if (dlg && !dlg.open) openDialog(dlg);
+    } else if (openDialogs.length) {
+        closeDialog(openDialogs[openDialogs.length - 1]);
+    }
+});
