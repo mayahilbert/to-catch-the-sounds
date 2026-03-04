@@ -462,7 +462,7 @@ nav {
     display: flex;
     justify-content: center;
     background-color: var(--main-bg-color);
-    margin: 0 1em;
+    margin: 0 clamp(1em, 15%, 5vw);
     width: auto;
     min-height: 100vh;
 }
