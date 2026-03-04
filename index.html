@@ -19,11 +19,6 @@
       <h1>Colleen Asper: <span class="home-title-2">to catch the sounds that</span> <span class="home-title-3">she can
           then give back</span> <span class="home-title-4">with her own voice</span></h1>
     </div>
-    <!--<div class="scroll-prompt" id="scroll-prompt">
-      <p>Scroll</p>
-      <div class="scroll-line" aria-hidden="true">
-      </div>
-    </div>-->
   </header>
 
   <nav aria-label="Secondary" class="secondary-nav">
@@ -46,12 +41,8 @@
 
           </div>
           <div class="info-wrap">
-            <button class="info-btn" type="button" aria-describedby="tip-1">i</button>
-            <div id="tip-1" role="tooltip">
-              <h2 id="act-i"><cite>Echo Act I: Sophist or Gossip</cite></h2>, 2026, video excerpted from documentation
-              of
-              2021 performance with music by Julie Harting and Lauren Siess on viola, running time 5 minutes
-            </div>
+            <button class="info-btn" type="button" data-dialog-target="act-i-text-overlay" aria-haspopup="dialog"
+              aria-controls="act-i-text-overlay" aria-label="View Act I description">i</button>
           </div>
         </div>
         <a href="#act-ii-section" class="act-link">To Act II</a>
@@ -72,13 +63,8 @@
           </div>
 
           <div class="info-wrap">
-            <button class="info-btn" type="button" aria-describedby="tip-2">i</button>
-            <div id="tip-2" role="tooltip">
-              <h2 id="act-ii"><cite>Echo Act II: Detective, Femme Fatale, Analyst</cite></h2>, 2026, video excerpted
-              from
-              documentation of 2021 performance with music by Julie Harting and Lauren Siess on viola, running time 5
-              minutes
-            </div>
+            <button class="info-btn" type="button" data-dialog-target="act-ii-text-overlay" aria-haspopup="dialog"
+              aria-controls="act-ii-text-overlay" aria-label="View Act II description">i</button>
           </div>
           <a href="#act-iii-section" class="act-link">To Act III</a>
 
@@ -96,13 +82,8 @@
             </button>
           </div>
           <div class="info-wrap">
-            <button class="info-btn" type="button" aria-describedby="tip-3">i</button>
-            <div id="tip-3" role="tooltip">
-              <h2 id="act-iii"><cite>Echo Act III: Representation Plays Peek-A-Boo</cite></h2>, 2026, video excerpted
-              from
-              documentation of
-              2021 performance with music by Julie Harting and Lauren Siess on viola, running time 10 minutes
-            </div>
+            <button class="info-btn" type="button" data-dialog-target="act-iii-text-overlay" aria-haspopup="dialog"
+              aria-controls="act-iii-text-overlay" aria-label="View Act III description">i</button>
           </div>
           <a href="#act-iv" class="act-link">To Act IV</a>
 
@@ -120,12 +101,8 @@
             </button>
           </div>
           <div class="info-wrap">
-            <button class="info-btn" type="button" aria-describedby="tip-4">i</button>
-            <div id="tip-4" role="tooltip">
-              <h2 id="act-iv"><cite>Echo Act IV: Interregnum</cite></h2>, 2026, video excerpted from documentation of
-              2021
-              performance with music by Julie Harting and Lauren Siess on viola, running time 4 minutes
-            </div>
+            <button class="info-btn" type="button" data-dialog-target="act-iv-text-overlay" aria-haspopup="dialog"
+              aria-controls="act-iv-text-overlay" aria-label="View Act IV description">i</button>
           </div>
           <button class="back-to-top">Back to the beginning</button>
 
@@ -141,6 +118,15 @@
           class="video-9-16" title="Act I" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </section>
     </dialog>
+    <dialog id="act-i-text-overlay" class="overlay" aria-label="Act I description">
+      <button class="close-btn" aria-label="Close Act I description">&#10006;</button>
+      <div class="desc">
+        <h2 id="act-i"><cite>Echo Act I: Sophist or Gossip</cite></h2> 2026, video excerpted from documentation
+        of
+        2021 performance with music by Julie Harting and Lauren Siess on viola, running time 5 minutes
+        <p>Act I of this four-part video installation introduces the character Echo from Ovid's “Echo and Narcissus,” and describes the first part of the myth, in which Echo uses her loquaciousness to distract Hera while Zeus is cheating on her, and Hera subsequently curses Echo to only speak the last words she hears. The “set” includes two paintings on a freestanding wall, one of an ear and one of a mouth in the negative space of the ear. Rolling striped fabric is visible through slits cut in the paintings until, when the fabric reaches the end of a roll, the performer is exposed. The colors of the fabric correspond to the score written by Julie Harting for the performance. </p>
+      </div>
+    </dialog>
     <dialog id="act-ii-overlay" class="overlay" aria-label="Act II video">
       <button class="close-btn" aria-label="Close Act II video">&#10006;</button>
       <section class="video-container" role="region" aria-label="Video player">
@@ -148,6 +134,16 @@
           src="https://player.vimeo.com/video/822026315?badge=0&loop=1&autopause=0&player_id=0&title=0&byline=0&portrait=0"
           class="video-9-16" title="Act II" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </section>
+    </dialog>
+    <dialog id="act-ii-text-overlay" class="overlay" aria-label="Act II description">
+      <button class="close-btn" aria-label="Close Act II description">&#10006;</button>
+      <div class="desc">
+        <h2 id="act-ii"><cite>Echo Act II: Detective, Femme Fatale, Analyst</cite></h2> 2026, video excerpted
+        from
+        documentation of 2021 performance with music by Julie Harting and Lauren Siess on viola, running time 5
+        minutes
+        <p>Act II of this four-part video installation continues the narration begun on the first floor, in which Echo distracts Hera while Zeus is cheating on her, and Hera subsequently curses Echo to only speak the last words she hears. In this act Narcissus is introduced as the object of Echo’s desire. The “set” includes two paintings on a freestanding wall, one of an ear and one of a mouth in the negative space of the ear. Rolling striped fabric is visible through slits cut in the paintings until, when the fabric reaches the end of a roll, the performer is exposed. The colors of the fabric correspond to the score written by Julie Harting for the performance.</p>
+      </div>
     </dialog>
     <dialog id="act-iii-overlay" class="overlay" aria-label="Act III video">
       <button class="close-btn" aria-label="Close Act III video">&#10006;</button>
@@ -157,6 +153,16 @@
           class="video-9-16" title="Act III" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </section>
     </dialog>
+    <dialog id="act-iii-text-overlay" class="overlay" aria-label="Act III description">
+      <button class="close-btn" aria-label="Close Act III description">&#10006;</button>
+      <div class="desc">
+        <h2 id="act-iii"><cite>Echo Act III: Representation Plays Peek-A-Boo</cite></h2> 2026, video excerpted
+        from
+        documentation of
+        2021 performance with music by Julie Harting and Lauren Siess on viola, running time 10 minutes
+        <p>Act III of this four-part video installation continues the narration begun on the first and second floors, in which Hera curses Echo to only speak the last words she hears, and Echo meets Narcissus and falls in love. In this act Narcissus becomes infatuated with his own reflection after rejecting Echo. The “set” includes two paintings on a freestanding wall, one of an ear and one of a mouth in the negative space of the ear. Rolling striped fabric is visible through slits cut in the paintings until, when the fabric reaches the end of a roll, the performer is exposed. The colors of the fabric correspond to the score written by Julie Harting for the performance.</p>
+      </div>
+    </dialog>
     <dialog id="act-iv-overlay" class="overlay" aria-label="Act IV video">
       <button class="close-btn" aria-label="Close Act IV video">&#10006;</button>
       <section class="video-container" role="region" aria-label="Video player">
@@ -164,6 +170,15 @@
           src="https://player.vimeo.com/video/822026315?badge=0&loop=1&autopause=0&player_id=0&title=0&byline=0&portrait=0"
           class="video-9-16" title="Act IV" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </section>
+    </dialog>
+    <dialog id="act-iv-text-overlay" class="overlay" aria-label="Act IV description">
+      <button class="close-btn" aria-label="Close Act IV description">&#10006;</button>
+      <div class="desc">
+        <h2 id="act-iv"><cite>Echo Act IV: Interregnum</cite></h2> 2026, video excerpted from documentation of
+        2021
+        performance with music by Julie Harting and Lauren Siess on viola, running time 4 minutes
+        <p>Act IV of this four-part video installation reveals the changeovers between the sequences shown on the preceding floors. The spectral scrolling patterns of the previous videos are here visible as loose fabric, and the mechanism that allows for the rolling motion is heard as a series of clanks and slides as rolls are removed and reset. </p>
+      </div>
     </dialog>
   </main>
 

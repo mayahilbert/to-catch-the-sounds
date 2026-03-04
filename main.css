@@ -56,16 +56,6 @@
 
 
 
-/* Panels are positioned at their sides by default */
-.gray-panel.left-panel {
-    left: 0;
-    transform: translateX(0);
-}
-
-.gray-panel.right-panel {
-    right: 0;
-    transform: translateX(0);
-}
 
 /* Prevent font size inflation */
 html {
@@ -219,11 +209,11 @@ nav.secondary-nav {
     flex-direction: row;
     justify-content: space-between;
     width: calc(100% - 2em);
-    z-index: 100;
     position: fixed;
     top: calc(50% - 4em);
     text-align: center;
     pointer-events: none;
+    z-index: 100;
 }
 
 
@@ -349,6 +339,16 @@ main {
     max-width: 100%;
     max-height: 100vh;
     object-fit: contain;
+}
+/* Panels are positioned at their sides by default */
+.gray-panel.left-panel {
+    left: 0;
+    transform: translateX(0);
+}
+
+.gray-panel.right-panel {
+    right: 0;
+    transform: translateX(0);
 }
 
 .gray-panel {
@@ -736,20 +736,16 @@ body.striped-bg {
 }
 
 .desc {
-    left: 1.5em;
-    right: auto;
-    width: auto;
-    bottom: 4em;
-    max-width: 23%;
-    position: absolute;
-    font-size: 0.75em;
+    color: var(--main-text-color);
+    max-width: 70ch;
+    margin: 1.7rem;
+}
+
+.desc h2 {
+    font-size: unset;
 }
 
 @media screen and (max-width: 55em) {
-    .video-container {
-        max-height: 80vw;
-    }
-
     .proj {
         display: flex;
         flex-direction: row;
@@ -764,7 +760,6 @@ body.striped-bg {
     position: absolute;
     left: 0;
     bottom: 1em;
-    z-index: 50;
 }
 
 .info-btn {
@@ -777,7 +772,9 @@ body.striped-bg {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font: italic .75rem "Instrument Serif", serif;
+    font: italic 1rem sans-serif;
+    color: var(--link-color);
+    background: var(--main-bg-color-light);
 }
 
 .info-btn:focus-visible {
@@ -786,52 +783,9 @@ body.striped-bg {
 }
 
 .partial-closed .info-wrap {
-    opacity: 0;
+    opacity: 1;
 }
 
-[role="tooltip"] {
-    position: absolute;
-    bottom: calc(100% + 6px);
-    right: 80%;
-    transform: translateX(100%);
-    width: 15em;
-    background: var(--main-bg-color);
-    font: .8rem/1.4 sans-serif;
-    padding: .5rem .6rem;
-    border-radius: 5px;
-}
-
-[role="tooltip"][hidden] {
-    display: none;
-}
-
-[role="tooltip"] h2 {
-    all: unset;
-    font-size: inherit;
-    font-weight: inherit;
-    font-family: inherit;
-    color: inherit;
-}
-
-@media (min-width: 900px) {
-    .info-wrap {
-        z-index: 20;
-    }
-
-    [role="tooltip"] {
-        all: unset;
-        font-size: 0.95rem;
-        font-weight: inherit;
-        font-family: inherit;
-        color: inherit;
-        max-width: 15em;
-        display: block;
-    }
-
-    .info-btn {
-        display: none;
-    }
-}
 
 /* Overlay */
 
