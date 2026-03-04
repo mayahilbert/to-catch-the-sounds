@@ -458,15 +458,16 @@ nav {
     }
 }
 
-.curatorial-main {
+.curatorial-main, .zine-container {
     display: flex;
     justify-content: center;
     background-color: var(--main-bg-color);
     margin: 0 1em;
     width: auto;
+    min-height: 100vh;
 }
 
-.curatorial-statement {
+.curatorial-statement, .zine-container .desc {
     margin: 1.4em;
     margin-block-start: 4em;
     max-width: 70ch;
