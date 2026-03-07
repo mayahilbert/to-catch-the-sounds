@@ -4,6 +4,7 @@
 const videoSections = document.querySelectorAll('.video-section');
 const introText = document.querySelector('header');
 const secondaryNav = document.querySelector('.secondary-nav');
+const clickViewBtn = document.getElementById('click-view-1');
 
 let currentActiveSection = 0;
 let isScrolling = false;
@@ -19,9 +20,11 @@ function applyState(isHome, activeSectionIndex, isOpen) {
     if (isHome) {
         introText?.classList.remove('fade-out');
         secondaryNav.style.display = 'none';
+        clickViewBtn.style.display = 'none';
     } else {
         introText?.classList.add('fade-out');
         secondaryNav.style.display = 'flex';
+        clickViewBtn.style.display = 'block';
     }
 
     // Sections
