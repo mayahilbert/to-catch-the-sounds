@@ -524,8 +524,8 @@ nav {
     padding-block-end: 3em;
     padding-inline: 8%;
     max-width: 70ch;
-position: sticky;
-top:10em;
+    position: sticky;
+    top: 10em;
 }
 
 .byline {
@@ -853,8 +853,11 @@ dialog[open] {
     animation: fadeIn 0.8s ease normal;
     display: flex;
     justify-content: center;
-    align-items: center;
     padding: 0;
+}
+
+dialog.video[open] {
+    align-items: center;
 }
 
 .overlay::backdrop {
