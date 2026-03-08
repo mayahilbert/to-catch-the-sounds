@@ -483,6 +483,10 @@ nav {
     min-height: 100vh;
 }
 
+.zine-container {
+    margin: 0 8%;
+}
+
 @media screen and (max-width: 50em) {
 
     .curatorial-main,
@@ -498,17 +502,30 @@ nav {
 }
 
 .zine-spreads {
-    margin: 1.4em;
     padding-block-end: 5em;
+    max-width: 80em;
+    margin: 0 auto;
+}
+
+.zine-wrapper {
+    width: 95%;
+}
+
+@media screen and (min-width: 50em) {
+    .zine-wrapper {
+        margin-top: 13%;
+    }
+
 }
 
 .zine-container .desc {
     margin: 0 auto;
     padding-block-start: 4em;
     padding-block-end: 3em;
-    padding-inline: 1em;
+    padding-inline: 8%;
     max-width: 70ch;
-
+position: sticky;
+top:10em;
 }
 
 .byline {
@@ -1110,5 +1127,5 @@ a:has(sup) {
 .zine-spreads {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(max(300px, 34%), 1fr));
-    gap: 3em;
+    row-gap: 3em;
 }
