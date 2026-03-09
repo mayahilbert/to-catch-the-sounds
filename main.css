@@ -497,7 +497,7 @@ nav {
 
 .curatorial-statement {
     max-width: 70ch;
-    margin: 1.4em;
+    margin: 2.5em 1.4em 1.4em 1.4em;
     padding-block-end: 5em;
 }
 
@@ -513,19 +513,17 @@ nav {
 
 @media screen and (min-width: 50em) {
     .zine-wrapper {
-        margin-top: 13%;
+        margin-top: 8%;
     }
 
 }
 
 .zine-container .desc {
     margin: 0 auto;
-    padding-block-start: 4em;
+    padding-block-start: 5%;
     padding-block-end: 3em;
     padding-inline: 8%;
     max-width: 70ch;
-    position: sticky;
-    top: 10em;
 }
 
 .byline {
@@ -533,6 +531,13 @@ nav {
     font-family: "Barlow Semi Condensed";
     letter-spacing: 0.08em;
     text-align: right;
+}
+
+.uppercase-header {
+    text-transform: uppercase;
+    font-family: "Barlow Semi Condensed";
+    letter-spacing: 0.08em;
+    font-weight: 600;
 }
 
 .curatorial-statement .byline {
