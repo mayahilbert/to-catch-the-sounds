@@ -496,7 +496,7 @@ nav {
 }
 
 .curatorial-statement {
-    max-width: 70ch;
+    max-width: clamp(100px, 70ch, calc(100% - 2em));
     margin: 2.5em 1.4em 1.4em 1.4em;
     padding-block-end: 5em;
 }
