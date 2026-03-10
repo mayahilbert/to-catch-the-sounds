@@ -1011,11 +1011,12 @@ a:has(sup) {
     position: fixed;
     top: 1.25rem;
     right: 1.25rem;
+    justify-content: flex-end;
 }
 
 .switch-toggle-wrapper {
     display: flex;
-
+    position: relative;
 }
 
 .switch-label-group {
@@ -1037,7 +1038,6 @@ a:has(sup) {
 /* ── Toggle switch ── */
 .switch-wrapper {
     position: relative;
-    flex-shrink: 0;
     height: 1.1em;
     /* match .switch-track */
 }
