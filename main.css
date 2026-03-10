@@ -1004,6 +1004,7 @@ a:has(sup) {
     flex-direction: column;
     border: 1px solid var(--link-color-hover);
     background-color: var(--main-bg-color);
+    max-width: 100%;
 }
 
 .switch-row.scrolled {
