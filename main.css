@@ -425,7 +425,7 @@ nav {
         grid-auto-flow: row;
         justify-content: space-between;
         align-content: space-between;
-        height: 80vh;
+        height: 70vh;
         pointer-events: none;
     }
 
